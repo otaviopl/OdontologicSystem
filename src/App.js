@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home/Home';
-import AddResource from '../src/pages/EditResource/EditResouce';
-import ViewResources from '../src/pages/EditResource/EditResouce';
-import EditResource from '../src/pages/EditResource/EditResouce';
+import AddResource from './pages/EditResource/EditResource';
+import ViewResources from './pages/EditResource/EditResource';
+import EditResource from './pages/EditResource/EditResource';
 import './App.css';
 
 function App() {

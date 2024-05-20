@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { addResource } from '../../services/resourceService';
 import './AddResource.css';
 
@@ -7,7 +7,7 @@ function AddResource() {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [message, setMessage] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,7 +15,7 @@ function AddResource() {
       const newResource = { id: Date.now(), name, age };
       addResource(newResource);
       setMessage('Paciente cadastrado com sucesso!');
-      setTimeout(() => history.push('/view'), 2000);
+      setTimeout(() => navigate('/view'), 2000);
     } else {
       setMessage('Por favor, preencha todos os campos.');
     }
