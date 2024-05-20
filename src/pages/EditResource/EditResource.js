@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getResources, updateResource } from '../../services/resourceService';
-
+import './EditResource.css';
 
 function EditResource() {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const resources = getResources();
   const resource = resources.find(r => r.id === parseInt(id));
 
@@ -15,9 +15,9 @@ function EditResource() {
 
   useEffect(() => {
     if (!resource) {
-      history.push('/view');
+      navigate('/view');
     }
-  }, [resource, history]);
+  }, [resource, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ function EditResource() {
       const updatedResource = { ...resource, name, age };
       updateResource(resource.id, updatedResource);
       setMessage('Paciente atualizado com sucesso!');
-      setTimeout(() => history.push('/view'), 2000);
+      setTimeout(() => navigate('/view'), 2000);
     } else {
       setMessage('Por favor, preencha todos os campos.');
     }
