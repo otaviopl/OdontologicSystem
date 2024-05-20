@@ -15,7 +15,7 @@ function ViewResources() {
     const success = deleteResource(id);
     if (success) {
       setMessage('Paciente excluído com sucesso!');
-      setResources(resources.filter(resource => resource.id !== id));
+      setResources(prevResources => prevResources.filter(resource => resource.id !== id));
     } else {
       setMessage('Ocorreu um problema ao excluir o paciente.');
     }
