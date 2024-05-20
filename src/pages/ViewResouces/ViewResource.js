@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getResources, deleteResource } from '../../services/resourceService';
-import './ViewResources.css';
+import './ViewResource.css';
 
 function ViewResources() {
   const resources = getResources();
