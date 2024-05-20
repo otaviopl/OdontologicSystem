@@ -21,9 +21,14 @@ const updateResource = (id, updatedResource) => {
 };
 
 const deleteResource = (id) => {
-  let resources = getResources();
-  resources = resources.filter(resource => resource.id !== id);
-  localStorage.setItem(RESOURCE_KEY, JSON.stringify(resources));
-};
+  const resources = getResources();
+  const index = resources.findIndex(resource => resource.id === id);
+  if (index !== -1) {
+    resources.splice(index, 1);
+    localStorage.setItem('resources', JSON.stringify(resources));
+    return true;
+  }
+  return false;
+}
 
 export { getResources, addResource, updateResource, deleteResource };

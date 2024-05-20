@@ -19,7 +19,7 @@ const Home = () => {
           <div className="icon">✏️</div>
           <p>Editar Paciente</p>
         </Link>
-        <Link to="/remove/:id" className="dashboard-item">
+        <Link to="/edit/:id" className="dashboard-item">
           <div className="icon">🗑️</div>
           <p>Remover Paciente</p>
         </Link>
