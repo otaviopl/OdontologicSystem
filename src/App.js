@@ -35,4 +35,3 @@ export default App;
 
 
 
-'../src/pages/EditResource/EditResouce';
