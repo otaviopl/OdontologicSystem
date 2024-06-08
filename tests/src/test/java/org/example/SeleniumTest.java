@@ -109,6 +109,21 @@ public class SeleniumTest {
         Thread.sleep(2000);
     }
 
+    @Test
+    @DisplayName("Should show error when adding patient without name")
+    void shouldShowErrorWithoutName() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/add");
+
+        String randomAge = String.valueOf(faker.number().numberBetween(1, 100));
+
+        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[2]")).sendKeys(randomAge);
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+        WebElement errorMessage = driver.findElement(By.xpath("//p[text()='Por favor, preencha todos os campos.']"));
+        assertTrue(errorMessage.isDisplayed(), "Error message is not displayed");
+        Thread.sleep(2000);
+    }
+
     @AfterEach
     void tearDown(){
         if (driver != null) {
