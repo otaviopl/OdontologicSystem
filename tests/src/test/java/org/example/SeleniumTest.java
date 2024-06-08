@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SeleniumTest {
     private WebDriver driver;
@@ -37,6 +38,22 @@ public class SeleniumTest {
         Thread.sleep(3000);
         String currentUrl = driver.getCurrentUrl();
         assertEquals("https://odontologic-system.vercel.app/view", currentUrl);
+    }
+
+    @Test
+    @DisplayName("Should show add pacients view")
+    void shouldOpenAddPacientesView() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/"); // request the page
+        driver.findElement(By.xpath("//a[contains(text(),'Adicionar Paciente')]")).click();
+        Thread.sleep(3000);
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals("https://odontologic-system.vercel.app/add", currentUrl);
+
+        String inputName = driver.findElement(By.xpath("(//div[@class='add-resource']//input)[1]")).getAttribute("value");
+        String inputIdade = driver.findElement(By.xpath("(//div[@class='add-resource']//input)[2]")).getAttribute("value");
+        // Verifique se os inputs estao vazios
+        assertTrue(inputName.isEmpty(), "Input is not empty");
+        assertTrue(inputIdade.isEmpty(), "Input is not empty");
     }
 
     @AfterEach
