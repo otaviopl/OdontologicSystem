@@ -111,7 +111,7 @@ public class SeleniumTest {
         driver.findElement(By.xpath("//button[text()='Excluir']")).click();
         WebElement pacienteDeleted = driver.findElement(By.xpath("//p[text()='Paciente excluído com sucesso!']"));
         assertTrue(pacienteDeleted.isDisplayed(), "Patient deleted phrase is not displayed");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class SeleniumTest {
 
         WebElement errorMessage = driver.findElement(By.xpath("//p[text()='Por favor, preencha todos os campos.']"));
         assertTrue(errorMessage.isDisplayed(), "Error message is not displayed");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class SeleniumTest {
 
         WebElement errorMessage = driver.findElement(By.xpath("//p[text()='Por favor, preencha todos os campos.']"));
         assertTrue(errorMessage.isDisplayed(), "Error message is not displayed");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 
     @Test
