@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class SeleniumTest {
     private WebDriver driver;
 
@@ -25,6 +27,16 @@ public class SeleniumTest {
     void shouldOpenProjectSite() throws InterruptedException {
         driver.get("https://odontologic-system.vercel.app/"); // request the page
         Thread.sleep(2000); // waits for 1s.
+    }
+
+    @Test
+    @DisplayName("Should show pacientes view")
+    void shouldOpenPacientesViewInProjectSite() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/"); // request the page
+        driver.findElement(By.xpath("//a[contains(text(),'Visualizar Pacientes')]")).click();
+        Thread.sleep(3000);
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals("https://odontologic-system.vercel.app/view", currentUrl);
     }
 
     @AfterEach
