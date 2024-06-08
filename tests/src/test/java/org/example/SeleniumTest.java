@@ -6,13 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SeleniumTest {
     private WebDriver driver;
@@ -23,7 +23,10 @@ public class SeleniumTest {
         System.setProperty("webdriver.chrome.driver","src/test/resources/drivers/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--disable-web-security");
+        options.addArguments("--user-data-dir=/tmp/chrome_dev_test");
         driver = new ChromeDriver(options);
+        faker = new Faker();
     }
 
     @Test
@@ -80,9 +83,39 @@ public class SeleniumTest {
         assertEquals("https://odontologic-system.vercel.app/view", secondCurrentUrl);
     }
 
+    @Test
+    @DisplayName("Should delete pacientes")
+    void shouldDeletePaciente() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/");
+        // Mock patient data and set it to localStorage
+        String nameFaker = faker.name().fullName();
+        String ageFaker = String.valueOf(faker.number().numberBetween(1, 100));
+        String patientData = String.format("[{\"id\": %d, \"name\": \"%s\", \"age\": \"%s\"}]",
+                faker.number().numberBetween(1, 100),
+                nameFaker,
+                ageFaker);
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("localStorage.setItem('patients', arguments[0]);", patientData);
+
+        driver.get("https://odontologic-system.vercel.app/view");
+
+        // Verify if paciente exist
+        WebElement patientNameElement = driver.findElement(By.xpath("//li[text()='" + nameFaker + "']"));
+        assertTrue(patientNameElement.isDisplayed(), "Patient name is not displayed");
+        driver.findElement(By.xpath("//button[text()='Excluir']")).click();
+        WebElement pacienteDeleted = driver.findElement(By.xpath("//p[text()='Paciente excluído com sucesso!']"));
+        assertTrue(pacienteDeleted.isDisplayed(), "Patient deleted phrase is not displayed");
+        Thread.sleep(2000);
+    }
+
     @AfterEach
     void tearDown(){
-        driver.quit();
+        if (driver != null) {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("window.localStorage.removeItem('patients');");
+            driver.quit();
+        }
     }
 }
 
