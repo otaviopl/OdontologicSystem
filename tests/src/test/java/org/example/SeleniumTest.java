@@ -1,5 +1,6 @@
 package org.example;
 
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SeleniumTest {
     private WebDriver driver;
+    private Faker faker;
 
     @BeforeEach
     void setUp(){
@@ -39,6 +41,7 @@ public class SeleniumTest {
         Thread.sleep(3000);
         String currentUrl = driver.getCurrentUrl();
         assertEquals("https://odontologic-system.vercel.app/view", currentUrl);
+        Thread.sleep(3000);
     }
 
     @Test
@@ -61,8 +64,13 @@ public class SeleniumTest {
     @DisplayName("Should subscribe an pacients")
     void shouldSubscribeAnPacients() throws InterruptedException {
         driver.get("https://odontologic-system.vercel.app/add");
-        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[1]")).sendKeys("paciente");
-        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[2]")).sendKeys("18");
+
+        // faker dinamicamente
+        String randomName = faker.name().fullName();
+        String randomAge = String.valueOf(faker.number().numberBetween(1, 100));
+
+        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[1]")).sendKeys(randomName);
+        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[2]")).sendKeys(randomAge);
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         //verify if element showed
         WebElement successMessage = driver.findElement(By.xpath("//p[text()='Paciente cadastrado com sucesso!']"));
