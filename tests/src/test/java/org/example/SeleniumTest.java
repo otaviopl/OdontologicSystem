@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -54,6 +55,21 @@ public class SeleniumTest {
         // Verifique se os inputs estao vazios
         assertTrue(inputName.isEmpty(), "Input is not empty");
         assertTrue(inputIdade.isEmpty(), "Input is not empty");
+    }
+
+    @Test
+    @DisplayName("Should subscribe an pacients")
+    void shouldSubscribeAnPacients() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/add");
+        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[1]")).sendKeys("paciente");
+        driver.findElement(By.xpath("(//div[@class='add-resource']//input)[2]")).sendKeys("18");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        //verify if element showed
+        WebElement successMessage = driver.findElement(By.xpath("//p[text()='Paciente cadastrado com sucesso!']"));
+        assertTrue(successMessage.isDisplayed(), "Success message is not displayed");
+        Thread.sleep(2500);
+        String secondCurrentUrl = driver.getCurrentUrl();
+        assertEquals("https://odontologic-system.vercel.app/view", secondCurrentUrl);
     }
 
     @AfterEach
