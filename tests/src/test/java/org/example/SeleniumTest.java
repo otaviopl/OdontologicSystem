@@ -5,12 +5,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -138,6 +143,42 @@ public class SeleniumTest {
         assertTrue(errorMessage.isDisplayed(), "Error message is not displayed");
         Thread.sleep(2000);
     }
+
+    @Test
+    @DisplayName("Should show error when editing patient without name")
+    void shouldShowErrorWhenEditingWithoutName() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/");
+
+        String nameFaker = faker.name().fullName();
+        String ageFaker = String.valueOf(faker.number().numberBetween(1, 100));
+        String patientData = String.format("[{\"id\": %d, \"name\": \"%s\", \"age\": \"%s\"}]",
+                faker.number().numberBetween(1, 100),
+                nameFaker,
+                ageFaker);
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("localStorage.setItem('patients', arguments[0]);", patientData);
+
+        driver.get("https://odontologic-system.vercel.app/view");
+
+        driver.findElement(By.xpath("(//div[@class='view-resources']//li[1]/a)")).click();
+        Thread.sleep(2000);
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='edit-resource']//input")));
+
+        WebElement nameInput = driver.findElement(By.xpath("(//div[@class='edit-resource']//input)[1]"));
+        nameInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        nameInput.sendKeys(Keys.DELETE);
+
+        driver.findElement(By.xpath("//button[text()='Salvar']")).click();
+
+
+        WebElement errorMessage = driver.findElement(By.xpath("//p[text()='Por favor, preencha todos os campos.']"));
+        assertTrue(errorMessage.isDisplayed(), "Error message is not displayed");
+        Thread.sleep(1000);
+    }
+
 
     @AfterEach
     void tearDown(){
