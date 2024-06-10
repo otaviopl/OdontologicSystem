@@ -213,6 +213,34 @@ public class SeleniumTest {
         Thread.sleep(1000);
     }
 
+    @Test
+    @DisplayName("Should show edit and delete page")
+    void shouldShowEditAndDeletePage() throws InterruptedException {
+        driver.get("https://odontologic-system.vercel.app/");
+
+        String nameFaker = faker.name().fullName();
+        String ageFaker = String.valueOf(faker.number().numberBetween(1, 100));
+        String patientData = String.format("[{\"id\": %d, \"name\": \"%s\", \"age\": \"%s\"}]",
+                faker.number().numberBetween(1, 100),
+                nameFaker,
+                ageFaker);
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("localStorage.setItem('patients', arguments[0]);", patientData);
+
+        driver.findElement(By.xpath("//p[text()='Editar Paciente']")).click();
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals("https://odontologic-system.vercel.app/view", currentUrl);
+        Thread.sleep(2000);
+
+        driver.get("https://odontologic-system.vercel.app/");
+        driver.findElement(By.xpath("//p[text()='Remover Paciente']")).click();
+        assertEquals("https://odontologic-system.vercel.app/view", currentUrl);
+        Thread.sleep(2000);
+
+        //SAME PAGE????
+    }
+
     @AfterEach
     void tearDown(){
         if (driver != null) {
